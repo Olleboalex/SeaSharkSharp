@@ -10,7 +10,7 @@ fn IsNumber(x:u8) -> bool
     x >= '0' as u8 && x <= '9' as u8
 }
 
-pub fn LexText(input:String) -> Vec<Token>
+pub fn lex_text(input:String) -> Vec<Token>
 {
     let text:&[u8] = input.as_bytes();
     let mut tokens:Vec<Token> = vec![];

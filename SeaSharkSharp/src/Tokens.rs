@@ -1,8 +1,10 @@
+#[derive(Clone, Copy)]
 pub enum NUMBER
 {
     FLOAT(f64),
     INT(i32)
 }
+#[derive(Clone, Copy)]
 pub enum OPERATOR
 {
     PLUS,
@@ -11,6 +13,7 @@ pub enum OPERATOR
     DIVIDE,
     MODULUS
 }
+#[derive(Clone, Copy)]
 pub enum Token
 {
     NUM(NUMBER),
@@ -31,6 +34,21 @@ impl Token
     pub fn new_float(x:f64) -> Token
     {
         Token::NUM(NUMBER::FLOAT(x))
+    }
+    pub fn token_to_f64(x:Token) -> f64
+    {
+        match x
+        {
+            Token::NUM(val) =>
+            {
+                match val
+                {
+                    NUMBER::FLOAT(y) => y,
+                    NUMBER::INT(y) => y as f64
+                }
+            }
+            _ => 0.0
+        }
     }
     pub fn parse_number(text:Vec<u8>) -> Token
     {
