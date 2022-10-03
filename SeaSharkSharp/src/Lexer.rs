@@ -22,7 +22,7 @@ pub fn LexText(input:String) -> Vec<Token>
             let mut temp:Vec<u8> = vec![text[cursor]];
             while cursor < text.len()
             {
-                if !IsNumber(text[cursor])
+                if !IsNumber(text[cursor]) && text[cursor] != '.' as u8
                 {
                     cursor -= 1;
                     break;
@@ -30,7 +30,7 @@ pub fn LexText(input:String) -> Vec<Token>
                 temp.push(text[cursor]);
                 cursor += 1;
             }
-            tokens.push(Token::ParseNumber(temp));
+            tokens.push(Token::parse_number(temp));
         }
         else if text[cursor] == '+' as u8
         {
@@ -50,5 +50,5 @@ pub fn LexText(input:String) -> Vec<Token>
         }
         cursor += 1;
     }
-    return vec![Token::NUM(NUMBER::FLOAT(10.0))]
+    tokens
 }
