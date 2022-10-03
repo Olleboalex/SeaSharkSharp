@@ -17,36 +17,62 @@ pub fn lex_text(input:String) -> Vec<Token>
     let mut cursor = 0;
     while cursor < text.len()
     {
-        if IsNumber(text[cursor])
+        if text[cursor] != ' ' as u8 && text[cursor] != '\n' as u8
         {
-            let mut temp:Vec<u8> = vec![text[cursor]];
-            while cursor < text.len()
+            if IsNumber(text[cursor])
             {
-                if !IsNumber(text[cursor]) && text[cursor] != '.' as u8
+                let mut temp:Vec<u8> = vec![];
+                while cursor < text.len()
                 {
-                    cursor -= 1;
-                    break;
+                    if !IsNumber(text[cursor]) && text[cursor] != '.' as u8
+                    {
+                        cursor -= 1;
+                        break;
+                    }
+                    temp.push(text[cursor]);
+                    cursor += 1;
                 }
-                temp.push(text[cursor]);
-                cursor += 1;
+                tokens.push(Token::parse_number(temp));
             }
-            tokens.push(Token::parse_number(temp));
-        }
-        else if text[cursor] == '+' as u8
-        {
-            tokens.push(Token::OPERATOR(OPERATOR::PLUS));
-        }
-        else if text[cursor] == '-' as u8
-        {
-            tokens.push(Token::OPERATOR(OPERATOR::MINUS));
-        }
-        else if text[cursor] == '*' as u8
-        {
-            tokens.push(Token::OPERATOR(OPERATOR::MULTPLY));
-        }
-        else if text[cursor] == '/' as u8
-        {
-            tokens.push(Token::OPERATOR(OPERATOR::DIVIDE));
+            else if text[cursor] == '+' as u8
+            {
+                tokens.push(Token::OPERATOR(OPERATOR::PLUS));
+            }
+            else if text[cursor] == '-' as u8
+            {
+                if IsNumber(text[cursor + 1])
+                {
+                    cursor += 1;
+                    let mut temp:Vec<u8> = vec!['-' as u8];
+                    while cursor < text.len()
+                    {
+                        if !IsNumber(text[cursor]) && text[cursor] != '.' as u8
+                        {
+                            cursor -= 1;
+                            break;
+                        }
+                        temp.push(text[cursor]);
+                        cursor += 1;
+                    }
+                    tokens.push(Token::parse_number(temp));
+                }
+                else
+                {
+                    tokens.push(Token::OPERATOR(OPERATOR::MINUS));
+                }
+            }
+            else if text[cursor] == '*' as u8
+            {
+                tokens.push(Token::OPERATOR(OPERATOR::MULTPLY));
+            }
+            else if text[cursor] == '/' as u8
+            {
+                tokens.push(Token::OPERATOR(OPERATOR::DIVIDE));
+            }
+            else if text[cursor] == '%' as u8
+            {
+                tokens.push(Token::OPERATOR(OPERATOR::MODULUS));
+            }
         }
         cursor += 1;
     }

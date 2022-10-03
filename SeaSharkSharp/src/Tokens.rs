@@ -50,6 +50,96 @@ impl Token
             _ => 0.0
         }
     }
+    pub fn multiply_tokens(x:Token, y:Token) -> Token
+    {
+        let mut result = 0.0;
+        let mut is_float = false;
+        match x
+        {
+            Token::NUM(z) =>
+            {
+                match z
+                {
+                    NUMBER::FLOAT(w) =>
+                    {
+                        result = w;
+                        is_float = true;
+                    }
+                    NUMBER::INT(w) =>
+                    {
+                        result = w as f64;
+                    }
+                }
+            }
+            _ => panic!("Multiplying tokens requires numbers!")
+        }
+        match y
+        {
+            Token::NUM(z) =>
+            {
+                match z
+                {
+                    NUMBER::FLOAT(w) =>
+                    {
+                        result *= w;
+                        is_float = true;
+                    }
+                    NUMBER::INT(w) =>
+                    {
+                        result *= w as f64;
+                    }
+                }
+            }
+            _ => panic!("Multiplying tokens requires numbers!")
+        }
+
+        if is_float {Token::new_float(result)} else {Token::new_int(result as i32)}
+    }
+    pub fn divide_tokens(x:Token, y:Token) -> Token
+    {
+        let mut result = 0.0;
+        let mut is_float = false;
+        match x
+        {
+            Token::NUM(z) =>
+            {
+                match z
+                {
+                    NUMBER::FLOAT(w) =>
+                    {
+                        result = w;
+                        is_float = true;
+                    }
+                    NUMBER::INT(w) =>
+                    {
+                        result = w as f64;
+                    }
+                }
+            }
+            _ => panic!("Dividing tokens requires numbers!")
+        }
+        match y
+        {
+            Token::NUM(z) =>
+            {
+                match z
+                {
+                    NUMBER::FLOAT(w) =>
+                    {
+                        result /= w;
+                        is_float = true;
+                    }
+                    NUMBER::INT(w) =>
+                    {
+                        result /= w as f64;
+                    }
+                }
+            }
+            _ => panic!("Dividing tokens requires numbers!")
+        }
+
+        if is_float {Token::new_float(result)} else {Token::new_int(result as i32)}
+    }
     pub fn parse_number(text:Vec<u8>) -> Token
     {
         let mut Negative = false;
