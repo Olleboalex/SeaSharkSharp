@@ -1,23 +1,26 @@
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub enum NUMBER
 {
     FLOAT(f64),
     INT(i32)
 }
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub enum OPERATOR
 {
     PLUS,
     MINUS,
     MULTPLY,
     DIVIDE,
-    MODULUS
+    MODULUS,
+    PARAN(Vec<Token>)
 }
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub enum Token
 {
     NUM(NUMBER),
-    OPERATOR(OPERATOR)
+    OPERATOR(OPERATOR),
+    BOOL(bool),
+    IF(Vec<Token>, Vec<Token>)
 }
 
 fn u8_to_i16(x:u8) -> i16
@@ -140,6 +143,38 @@ impl Token
 
         if is_float {Token::new_float(result)} else {Token::new_int(result as i32)}
     }
+    pub fn modulus_tokens(x:Token, y:Token) -> Token
+    {
+        match x
+        {
+            Token::NUM(z) =>
+            {
+                match z
+                {
+                    NUMBER::INT(num1) =>
+                    {
+                        match y
+                        {
+                            Token::NUM(w) =>
+                            {
+                                match w
+                                {
+                                    NUMBER::INT(num2) =>
+                                    {
+                                        return Token::new_int(num1 % num2);
+                                    }
+                                    _ => panic!("Error when doing modulus!")
+                                }
+                            }
+                            _ => panic!("Error when doing modulus!")
+                        }
+                    }
+                    _ => panic!("When doing modulus operator, all numbers must be integers")
+                }
+            }
+            _ => panic!("Error when doing modulus!")
+        }
+    }
     pub fn parse_number(text:Vec<u8>) -> Token
     {
         let mut Negative = false;
@@ -156,6 +191,7 @@ impl Token
         {
             if text[cursor] == '.' as u8
             {
+                cursor += 1;
                 break;
             }
             LSide.push(u8_to_i16(text[cursor]));

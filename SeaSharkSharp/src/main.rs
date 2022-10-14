@@ -7,6 +7,9 @@ mod Lexer;
 use crate::ArithmaticParser::*;
 mod ArithmaticParser;
 
+use crate::Parsing::*;
+mod Parsing;
+
 fn print_token(x:Token)
 {
     match x
@@ -17,11 +20,11 @@ fn print_token(x:Token)
             {
                 NUMBER::FLOAT(z) =>
                 {
-                    println!("float: {z}");
+                    println!("{z}");
                 }
                 NUMBER::INT(z) =>
                 {
-                    println!("int: {z}");
+                    println!("{z}");
                 }
             }
         }
@@ -29,17 +32,34 @@ fn print_token(x:Token)
         {
             println!("OP");
         }
+        Token::BOOL(y) =>
+        {
+            println!("{y}");
+        }
+        Token::IF(y, z) =>
+        {
+            println!("if ");
+            print_tokens(y);
+            println!("then ");
+            print_tokens(z);
+            println!("END");
+        }
+        _ => ()
+    }
+}
+
+fn print_tokens(tokens:Vec<Token>)
+{
+    for element in tokens
+    {
+        print_token(element);
     }
 }
 
 fn main() 
 {
-    let TEXT = String::from("2 * 3 + -1 * 10");
+    let TEXT = String::from("if (true) {60 / (3 + 2)}");
     let tokens:Vec<Token> = lex_text(TEXT);
-    for x in tokens.clone()
-    {
-        print_token(x);
-    }
-    let result = arithmatic_parser_multiply_divide(tokens);
+    let result = Parse(tokens.clone());
     print_token(result);
 }
