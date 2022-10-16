@@ -10,6 +10,9 @@ mod ArithmaticParser;
 use crate::Parsing::*;
 mod Parsing;
 
+use crate::StandardLibrary::*;
+mod StandardLibrary;
+
 fn print_token(x:Token)
 {
     match x
@@ -38,9 +41,9 @@ fn print_token(x:Token)
         }
         Token::IF(y, z) =>
         {
-            println!("if ");
+            println!("if");
             print_tokens(y);
-            println!("then ");
+            println!("then");
             print_tokens(z);
             println!("END");
         }
@@ -58,8 +61,7 @@ fn print_tokens(tokens:Vec<Token>)
 
 fn main() 
 {
-    let TEXT = String::from("if (true) {60 / (3 + 2)}");
+    let TEXT = String::from("while (true) {1 + 1}");
     let tokens:Vec<Token> = lex_text(TEXT);
     let result = Parse(tokens.clone());
-    print_token(result);
 }

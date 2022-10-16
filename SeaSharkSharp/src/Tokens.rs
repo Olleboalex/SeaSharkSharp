@@ -20,7 +20,11 @@ pub enum Token
     NUM(NUMBER),
     OPERATOR(OPERATOR),
     BOOL(bool),
-    IF(Vec<Token>, Vec<Token>)
+    IF(Vec<Token>, Vec<Token>),
+    WHILE(Vec<Token>, Vec<Token>),
+    VARIABLE(String),
+    METHODCALL(String, Vec<Vec<Token>>),
+    NORETURN
 }
 
 fn u8_to_i16(x:u8) -> i16
